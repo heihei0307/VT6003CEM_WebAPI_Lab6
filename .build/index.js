@@ -24,6 +24,17 @@ var import_articles = require("./routes/articles");
 const app = new import_koa.default();
 app.use((0, import_koa_logger.default)());
 app.use((0, import_koa_json.default)());
-app.use(import_articles.router.routes());
+app.use(import_articles.router.routes()).use(import_articles.router.allowedMethods());
+app.use(async (ctx, next) => {
+  try {
+    await next();
+    if (ctx.status === 404) {
+      ctx.status = 404;
+      ctx.body = { err: "No such endpoint existed" };
+    }
+  } catch (err) {
+    ctx.body = { err };
+  }
+});
 app.listen(10888);
 //# sourceMappingURL=index.js.map

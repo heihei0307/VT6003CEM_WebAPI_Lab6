@@ -1,5 +1,5 @@
 import Koa from "koa";
-// import Router, { RouterContext } from "koa-router";
+import Router, { RouterContext } from "koa-router";
 import logger from "koa-logger";
 import json from "koa-json";
 
@@ -20,5 +20,19 @@ const app: Koa = new Koa();
 app.use(logger());
 app.use(json());
 // app.use(router.routes());
-app.use(articles.routes())
+app.use(articles.routes()).use(articles.allowedMethods())
+
+app.use(async (ctx: RouterContext, next: any) => {
+  try {
+    await next()
+    if (ctx.status === 404) {
+      ctx.status = 404;
+      ctx.body = { err: "No such endpoint existed" }
+    }
+  } catch (err: any) {
+    ctx.body = { err: err }
+  }
+})
+
+
 app.listen(10888);
