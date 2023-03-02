@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../interface/articles.ts"],
+  "sourcesContent": ["export interface iArticles {\n  id: number\n  title: string\n  alltext: string\n  summary?: string\n  datecreated: Date\n  datemodified?: Date\n  views: number\n  imageurl?: string\n  published: boolean\n  authorid?: number\n}\n\nexport interface iArticlesArray extends Array<iArticles> { }"],
+  "mappings": ";;;;;;;;;;;;;;AAAA;AAAA;",
+  "names": []
+}

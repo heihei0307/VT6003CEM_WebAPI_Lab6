@@ -21,10 +21,12 @@ var import_koa = __toESM(require("koa"));
 var import_koa_logger = __toESM(require("koa-logger"));
 var import_koa_json = __toESM(require("koa-json"));
 var import_articles = require("./routes/articles");
+var import_users = require("./routes/users");
 const app = new import_koa.default();
 app.use((0, import_koa_logger.default)());
 app.use((0, import_koa_json.default)());
 app.use(import_articles.router.routes()).use(import_articles.router.allowedMethods());
+app.use(import_users.router.routes()).use(import_users.router.allowedMethods());
 app.use(async (ctx, next) => {
   try {
     await next();

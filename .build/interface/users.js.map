@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../interface/users.ts"],
+  "sourcesContent": ["export interface iUsers {\n  id: number\n  firstname?: string\n  lastname?: string\n  username:string\n  about?:string\n  dateregistered: Date\n  password?: string\n  passwordsalt?: string\n  email: string\n  avatarurl?: string\n}\n\nexport interface iUsersArray extends Array<iUsers> { }"],
+  "mappings": ";;;;;;;;;;;;;;AAAA;AAAA;",
+  "names": []
+}

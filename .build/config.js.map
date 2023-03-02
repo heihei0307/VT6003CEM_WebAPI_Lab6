@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../config.ts"],
+  "sourcesContent": ["export const config = {\n  host: \"floppy.db.elephantsql.com\",\n  port: 5432,\n  user: \"fxcpyjcm\",\n  password: \"pezTBUrDNGmgCN25xximxFFfX1slO8mi\",\n  database: \"fxcpyjcm\",\n  connection_limit: 100\n}\n"],
+  "mappings": ";;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AAAO,MAAM,SAAS;AAAA,EACpB,MAAM;AAAA,EACN,MAAM;AAAA,EACN,MAAM;AAAA,EACN,UAAU;AAAA,EACV,UAAU;AAAA,EACV,kBAAkB;AACpB;",
+  "names": []
+}
