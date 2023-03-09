@@ -25,6 +25,7 @@ var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: tru
 var users_exports = {};
 __export(users_exports, {
   add: () => add,
+  findByUsername: () => findByUsername,
   getAll: () => getAll,
   getById: () => getById,
   remove: () => remove,
@@ -86,9 +87,15 @@ const remove = async (id) => {
     return err;
   }
 };
+const findByUsername = async (username) => {
+  const query = "SELECT * FROM users where username = ?";
+  const user = await db.run_query(query, [username]);
+  return user;
+};
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
   add,
+  findByUsername,
   getAll,
   getById,
   remove,

@@ -5,6 +5,7 @@ import json from "koa-json";
 
 import { router as articles } from "./routes/articles";
 import { router as users } from "./routes/users";
+import { router as special } from "./routes/special";
 
 
 const app: Koa = new Koa();
@@ -23,6 +24,7 @@ app.use(json());
 // app.use(router.routes());
 app.use(articles.routes()).use(articles.allowedMethods())
 app.use(users.routes()).use(users.allowedMethods())
+app.use(special.routes()).use(special.allowedMethods())
 
 app.use(async (ctx: RouterContext, next: any) => {
   try {

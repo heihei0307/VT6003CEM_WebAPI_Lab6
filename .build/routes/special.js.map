@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../routes/special.ts"],
+  "sourcesContent": ["import Router, { RouterContext } from \"koa-router\";\nimport { basicAuth } from '../controllers/auth'\n\nconst router = new Router({ prefix: '/api/v1' });\n\n// Just for testing\nrouter.get('/', async (ctx: RouterContext, next: any) => {\n  ctx.body = {\n    message: 'Public API return'\n  };\n  await next();\n})\n// Add a protected route that requires authentication\nrouter.get(\"/private\", basicAuth);\n\nexport { router };"],
+  "mappings": ";;;;;;;;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA,wBAAsC;AACtC,kBAA0B;AAE1B,MAAM,SAAS,IAAI,kBAAAA,QAAO,EAAE,QAAQ,UAAU,CAAC;AAG/C,OAAO,IAAI,KAAK,OAAO,KAAoB,SAAc;AACvD,MAAI,OAAO;AAAA,IACT,SAAS;AAAA,EACX;AACA,QAAM,KAAK;AACb,CAAC;AAED,OAAO,IAAI,YAAY,qBAAS;",
+  "names": ["Router"]
+}

@@ -1,7 +1,6 @@
 import * as db from '../helpers/database'
 import * as DTO from '../interface/users'
 
-//get a single article by its id
 export const getById = async (id: any) => {
   let query = "SELECT * FROM users WHERE ID = ?"
   let values = [id]
@@ -9,7 +8,6 @@ export const getById = async (id: any) => {
   return data;
 }
 
-//list all the articles in the database
 export const getAll = async () => {
   // TODO: use page, limit, order to give pagination
   let query = "SELECT * FROM users;"
@@ -17,7 +15,6 @@ export const getAll = async () => {
   return data;
 }
 
-//create a new article in the database
 export const add = async (users: any) => {
   let keys = Object.keys(users);
   let values = Object.values(users);
@@ -34,7 +31,7 @@ export const add = async (users: any) => {
   }
 }
 
-export const update = async (id:number, user: DTO.iUsers) => {
+export const update = async (id: number, user: DTO.iUsers) => {
   let updateItem = ''
   Object.entries(user).forEach(entry => {
     const [key, value] = entry;
@@ -61,4 +58,10 @@ export const remove = async (id: number) => {
   } catch (err: any) {
     return err;
   }
+}
+
+export const findByUsername = async (username: string) => {
+  const query = 'SELECT * FROM users where username = ?'
+  const user = await db.run_query(query, [username])
+  return user
 }

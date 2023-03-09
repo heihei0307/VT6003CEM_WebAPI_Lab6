@@ -30,6 +30,7 @@ module.exports = __toCommonJS(articles_exports);
 var import_koa_router = __toESM(require("koa-router"));
 var import_koa_bodyparser = __toESM(require("koa-bodyparser"));
 var model = __toESM(require("../models/articles"));
+var import_auth = require("../controllers/auth");
 const dateNow = new Date();
 const articles = [
   { id: 1, title: "hello article", fullText: "some text here to fill the body", dateCreated: dateNow, views: 100, published: true },
@@ -86,6 +87,7 @@ const deleteArticle = async (ctx, next) => {
   let result = await model.remove(id);
   if (result.status == 201) {
     ctx.status = 201;
+    ctx.body = { success: `success remove id = ${id} data` };
   } else {
     ctx.status = 500;
     ctx.body = { err: "delete data failed" };
@@ -94,9 +96,9 @@ const deleteArticle = async (ctx, next) => {
 };
 router.get("/", getAll);
 router.get("/:id([0-9]{1,})", getById);
-router.post("/", (0, import_koa_bodyparser.default)(), createArticle);
-router.put("/:id([0-9]{1,})", (0, import_koa_bodyparser.default)(), updateArticle);
-router.delete("/:id([0-9]{1,})", deleteArticle);
+router.post("/", import_auth.basicAuth, (0, import_koa_bodyparser.default)(), createArticle);
+router.put("/:id([0-9]{1,})", import_auth.basicAuth, (0, import_koa_bodyparser.default)(), updateArticle);
+router.delete("/:id([0-9]{1,})", import_auth.basicAuth, deleteArticle);
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
   router

@@ -30,6 +30,7 @@ module.exports = __toCommonJS(users_exports);
 var import_koa_router = __toESM(require("koa-router"));
 var import_koa_bodyparser = __toESM(require("koa-bodyparser"));
 var model = __toESM(require("../models/users"));
+var import_auth = require("../controllers/auth");
 const router = new import_koa_router.default({ prefix: "/api/v1/users" });
 const getAll = async (ctx, next) => {
   let user = await model.getAll();
@@ -86,11 +87,11 @@ const deleteUser = async (ctx, next) => {
   }
   await next();
 };
-router.get("/", getAll);
-router.get("/:id([0-9]{1,})", getById);
-router.post("/", (0, import_koa_bodyparser.default)(), createUser);
-router.put("/:id([0-9]{1,})", (0, import_koa_bodyparser.default)(), updateUser);
-router.delete("/:id([0-9]{1,})", deleteUser);
+router.get("/", import_auth.basicAuth, getAll);
+router.get("/:id([0-9]{1,})", import_auth.basicAuth, getById);
+router.post("/", import_auth.basicAuth, (0, import_koa_bodyparser.default)(), createUser);
+router.put("/:id([0-9]{1,})", import_auth.basicAuth, (0, import_koa_bodyparser.default)(), updateUser);
+router.delete("/:id([0-9]{1,})", import_auth.basicAuth, deleteUser);
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
   router
