@@ -64,26 +64,38 @@ const createUser = async (ctx, next) => {
 };
 const updateUser = async (ctx, next) => {
   let id = +ctx.params.id;
-  const body = ctx.request.body;
-  let result = await model.update(id, body);
-  if (result.status == 201) {
-    ctx.status = 201;
-    ctx.body = body;
-  } else {
+  let loginUser = ctx.state.user;
+  if (id != loginUser.user.id) {
     ctx.status = 500;
-    ctx.body = { err: "update data failed" };
+    ctx.body = { err: "You can't edit other user information!" };
+  } else {
+    const body = ctx.request.body;
+    let result = await model.update(id, body);
+    if (result.status == 201) {
+      ctx.status = 201;
+      ctx.body = body;
+    } else {
+      ctx.status = 500;
+      ctx.body = { err: "update data failed" };
+    }
   }
   await next();
 };
 const deleteUser = async (ctx, next) => {
   let id = +ctx.params.id;
-  let result = await model.remove(id);
-  if (result.status == 201) {
-    ctx.status = 201;
-    ctx.body = { success: `success remove id = ${id} data` };
-  } else {
+  let loginUser = ctx.state.user;
+  if (id === loginUser.user.id) {
     ctx.status = 500;
-    ctx.body = { err: "delete data failed" };
+    ctx.body = { err: "You can't remove your user, please remove other user!" };
+  } else {
+    let result = await model.remove(id);
+    if (result.status == 201) {
+      ctx.status = 201;
+      ctx.body = { success: `success remove id = ${id} data` };
+    } else {
+      ctx.status = 500;
+      ctx.body = { err: "delete data failed" };
+    }
   }
   await next();
 };

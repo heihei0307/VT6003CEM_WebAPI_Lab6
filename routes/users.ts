@@ -42,27 +42,41 @@ const createUser = async (ctx: RouterContext, next: any) => {
 }
 const updateUser = async (ctx: RouterContext, next: any) => {
   let id = +ctx.params.id
-  const body = <DTO.iUsers>ctx.request.body;
-  let result = await model.update(id, body)
-  if (result.status == 201) {
-    ctx.status = 201;
-    ctx.body = body;
+  let loginUser = ctx.state.user
+  if (id != loginUser.user.id) {
+    ctx.status = 500
+    ctx.body = { err: "You can't edit other user information!" }
   } else {
-    ctx.status = 500;
-    ctx.body = { err: "update data failed" };
+    const body = <DTO.iUsers>ctx.request.body;
+    let result = await model.update(id, body)
+    if (result.status == 201) {
+      ctx.status = 201;
+      ctx.body = body;
+    } else {
+      ctx.status = 500;
+      ctx.body = { err: "update data failed" };
+    }
   }
+
   await next()
 }
 const deleteUser = async (ctx: RouterContext, next: any) => {
   let id = +ctx.params.id
-  let result = await model.remove(id)
-  if (result.status == 201) {
-    ctx.status = 201;
-    ctx.body = { success: `success remove id = ${id} data` }
+  let loginUser = ctx.state.user
+  if (id === loginUser.user.id) {
+    ctx.status = 500
+    ctx.body = { err: "You can't remove your user, please remove other user!" }
   } else {
-    ctx.status = 500;
-    ctx.body = { err: "delete data failed" };
+    let result = await model.remove(id)
+    if (result.status == 201) {
+      ctx.status = 201;
+      ctx.body = { success: `success remove id = ${id} data` }
+    } else {
+      ctx.status = 500;
+      ctx.body = { err: "delete data failed" };
+    }
   }
+
 
   await next()
 }

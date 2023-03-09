@@ -3,7 +3,9 @@ import { BasicStrategy } from "passport-http";
 import { RouterContext } from "koa-router";
 import * as users from '../models/users';
 
-const verifyPassword = (user: any, password: string) => {
+import * as DTO from '../interface/users'
+
+const verifyPassword = (user: DTO.iUsers, password: string) => {
   return user.password === password;
 }
 

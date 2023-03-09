@@ -32,12 +32,6 @@ var import_koa_bodyparser = __toESM(require("koa-bodyparser"));
 var model = __toESM(require("../models/articles"));
 var import_auth = require("../controllers/auth");
 const dateNow = new Date();
-const articles = [
-  { id: 1, title: "hello article", fullText: "some text here to fill the body", dateCreated: dateNow, views: 100, published: true },
-  { id: 2, title: "another article", fullText: "again here is some text here to fill", dateCreated: dateNow, views: 100, published: true },
-  { id: 3, title: "coventry university ", fullText: "some news about coventry university", dateCreated: dateNow, views: 100, published: true },
-  { id: 4, title: "smart campus", fullText: "smart campus is coming to IVE", dateCreated: dateNow, views: 100, published: true }
-];
 const router = new import_koa_router.default({ prefix: "/api/v1/articles" });
 const getAll = async (ctx, next) => {
   let articlesSQL = await model.getAll();
@@ -71,11 +65,15 @@ const createArticle = async (ctx, next) => {
 };
 const updateArticle = async (ctx, next) => {
   let id = +ctx.params.id;
+  let loginUser = ctx.state.user;
   const body = ctx.request.body;
-  let result = await model.update(id, body);
+  let result = await model.update(id, body, +loginUser.user.id);
   if (result.status == 201) {
     ctx.status = 201;
     ctx.body = body;
+  } else if (result.err) {
+    ctx.status = 500;
+    ctx.body = { err: result.err };
   } else {
     ctx.status = 500;
     ctx.body = { err: "update data failed" };
@@ -84,10 +82,14 @@ const updateArticle = async (ctx, next) => {
 };
 const deleteArticle = async (ctx, next) => {
   let id = +ctx.params.id;
-  let result = await model.remove(id);
+  let loginUser = ctx.state.user;
+  let result = await model.remove(id, +loginUser.user.id);
   if (result.status == 201) {
     ctx.status = 201;
     ctx.body = { success: `success remove id = ${id} data` };
+  } else if (result.err) {
+    ctx.status = 500;
+    ctx.body = { err: result.err };
   } else {
     ctx.status = 500;
     ctx.body = { err: "delete data failed" };

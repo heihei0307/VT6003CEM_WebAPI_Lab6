@@ -5,30 +5,30 @@ import * as DTO from '../interface/articles'
 
 import { basicAuth } from '../controllers/auth'
 
-interface iArticles {
-  id: number
-  title: string
-  fullText: string
-  summary?: string
-  dateCreated: Date
-  dateModified?: Date
-  views: number
-  imageURL?: string
-  published: boolean
-  authorId?: number
-  categoryId?: number
-}
+// interface iArticles {
+//   id: number
+//   title: string
+//   fullText: string
+//   summary?: string
+//   dateCreated: Date
+//   dateModified?: Date
+//   views: number
+//   imageURL?: string
+//   published: boolean
+//   authorId?: number
+//   categoryId?: number
+// }
 
-interface iArticlesArray extends Array<iArticles> { }
+// interface iArticlesArray extends Array<iArticles> { }
 
 const dateNow = new Date()
 
-const articles: iArticlesArray = [
-  { id: 1, title: 'hello article', fullText: 'some text here to fill the body', dateCreated: dateNow, views: 100, published: true },
-  { id: 2, title: 'another article', fullText: 'again here is some text here to fill', dateCreated: dateNow, views: 100, published: true },
-  { id: 3, title: 'coventry university ', fullText: 'some news about coventry university', dateCreated: dateNow, views: 100, published: true },
-  { id: 4, title: 'smart campus', fullText: 'smart campus is coming to IVE', dateCreated: dateNow, views: 100, published: true }
-];
+// const articles: iArticlesArray = [
+//   { id: 1, title: 'hello article', fullText: 'some text here to fill the body', dateCreated: dateNow, views: 100, published: true },
+//   { id: 2, title: 'another article', fullText: 'again here is some text here to fill', dateCreated: dateNow, views: 100, published: true },
+//   { id: 3, title: 'coventry university ', fullText: 'some news about coventry university', dateCreated: dateNow, views: 100, published: true },
+//   { id: 4, title: 'smart campus', fullText: 'smart campus is coming to IVE', dateCreated: dateNow, views: 100, published: true }
+// ];
 
 
 const router = new Router({ prefix: '/api/v1/articles' });
@@ -95,14 +95,19 @@ const updateArticle = async (ctx: RouterContext, next: any) => {
   // articles[id - 1].published = published ?? articles[id - 1].published
   // articles[id - 1].authorId = authorId ?? articles[id - 1].authorId
   // articles[id - 1].categoryId = categoryId ?? articles[id - 1].categoryId
-
+  let loginUser = ctx.state.user
   const body = <DTO.iArticles>ctx.request.body;
-  let result = await model.update(id, body)
+  let result = await model.update(id, body, +loginUser.user.id)
   // ctx.body = articles[id - 1]
   if (result.status == 201) {
     ctx.status = 201;
     ctx.body = body;
-  } else {
+  }
+  else if (result.err) {
+    ctx.status = 500
+    ctx.body = { err: result.err }
+  }
+  else {
     ctx.status = 500;
     ctx.body = { err: "update data failed" };
   }
@@ -110,17 +115,23 @@ const updateArticle = async (ctx: RouterContext, next: any) => {
 }
 const deleteArticle = async (ctx: RouterContext, next: any) => {
   let id = +ctx.params.id
+  let loginUser = ctx.state.user
   // if (!((id < articles.length + 1) && (id > 0))) {
   //   ctx.status = 404
   // }
   // const objWithIdIndex = articles.findIndex((obj) => obj.id === id)
   // articles.splice(objWithIdIndex, 1)
   // ctx.status = 200
-  let result = await model.remove(id)
+  let result = await model.remove(id, +loginUser.user.id)
   if (result.status == 201) {
     ctx.status = 201;
     ctx.body = { success: `success remove id = ${id} data` }
-  } else {
+  }
+  else if (result.err) {
+    ctx.status = 500
+    ctx.body = { err: result.err }
+  }
+  else {
     ctx.status = 500;
     ctx.body = { err: "delete data failed" };
   }

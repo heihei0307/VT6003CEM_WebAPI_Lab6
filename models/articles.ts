@@ -34,7 +34,18 @@ export const add = async (article: any) => {
   }
 }
 
-export const update = async (id: number, article: DTO.iArticles) => {
+export const update = async (id: number, article: DTO.iArticles, userId: number) => {
+  if (!await checkArticlesOwner(id, userId)) {
+    return { status: 500, err: "You are not articles owner" }
+  }
+  // let articlesData = await getById(id)
+  // if (articlesData.length) {
+  //   let articles = <DTO.iArticles>articlesData[0]
+  //   if (articles.authorid != userId) {
+  //     return { status: 500, err: "You are not articles owner" }
+  //   }
+  // }
+
   let updateItem = ''
   Object.entries(article).forEach(entry => {
     const [key, value] = entry;
@@ -53,12 +64,33 @@ export const update = async (id: number, article: DTO.iArticles) => {
   }
 }
 
-export const remove = async (id: number) => {
+export const remove = async (id: number, userId: number) => {
+  if (!await checkArticlesOwner(id, userId)) {
+    return { status: 500, err: "You are not articles owner" }
+  }
+  // let articlesData = await getById(id)
+  // if (articlesData.length) {
+  //   let articles = <DTO.iArticles>articlesData[0]
+  //   if (articles.authorid != userId) {
+  //     return { status: 500, err: "You are not articles owner" }
+  //   }
+  // }
   let query = `DELETE FROM articles WHERE id = ${id};`
   try {
     await db.run_delete(query);
     return { status: 201 };
   } catch (err: any) {
     return err;
+  }
+}
+
+const checkArticlesOwner = async (articlesId: number, loginUserId: number) => {
+  let articlesData = await getById(articlesId)
+  if (articlesData.length) {
+    let articles = <DTO.iArticles>articlesData[0]
+    if (articles.authorid != loginUserId)
+      return false
+    else
+      return true
   }
 }

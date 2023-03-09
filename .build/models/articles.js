@@ -60,7 +60,14 @@ const add = async (article) => {
     return err;
   }
 };
-const update = async (id, article) => {
+const update = async (id, article, userId) => {
+  let articlesData = await getById(id);
+  if (articlesData.length) {
+    let articles = articlesData[0];
+    if (articles.authorid != userId) {
+      return { status: 500, err: "You are not articles owner" };
+    }
+  }
   let updateItem = "";
   Object.entries(article).forEach((entry) => {
     const [key, value] = entry;
@@ -77,13 +84,26 @@ const update = async (id, article) => {
     return err;
   }
 };
-const remove = async (id) => {
+const remove = async (id, userId) => {
+  if (!await checkArticlesOwner(id, userId)) {
+    return { status: 500, err: "You are not articles owner" };
+  }
   let query = `DELETE FROM articles WHERE id = ${id};`;
   try {
     await db.run_delete(query);
     return { status: 201 };
   } catch (err) {
     return err;
+  }
+};
+const checkArticlesOwner = async (articlesId, loginUserId) => {
+  let articlesData = await getById(articlesId);
+  if (articlesData.length) {
+    let articles = articlesData[0];
+    if (articles.authorid != loginUserId)
+      return false;
+    else
+      return true;
   }
 };
 // Annotate the CommonJS export names for ESM import in node:
