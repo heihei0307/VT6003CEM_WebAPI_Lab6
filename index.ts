@@ -6,6 +6,7 @@ import json from "koa-json";
 import { router as articles } from "./routes/articles";
 import { router as users } from "./routes/users";
 import { router as special } from "./routes/special";
+import serve from 'koa-static-folder';
 
 
 const app: Koa = new Koa();
@@ -18,6 +19,8 @@ const app: Koa = new Koa();
 // }
 // router.get('/api/v1', welcomeAPI);
 
+
+app.use(serve('./docs'))
 
 app.use(logger());
 app.use(json());

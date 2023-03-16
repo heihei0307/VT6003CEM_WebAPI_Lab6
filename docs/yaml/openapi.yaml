@@ -1,0 +1,152 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Back End Demonstration API
+  description: A Simple blog API.
+  contact:
+    name: Wally Kong
+    email: wallykong@gmail.com
+  license:
+    name: Apache 2.0
+    url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
+servers:
+  - url: 'https://VT6003CEMWebAPILab6.wallykong.repl.co'
+    description: Development server
+tags:
+  - name: Users
+    description: API endpoints for user management.
+  - name: Articles
+    description: Access and perform CRUD operations on blog entries.
+paths:
+  /articles:
+    get:
+      tags:
+        - Articles
+      description:
+        Get All article.
+      responses:
+        '200':
+          description: View of all article records.
+        '404':
+          description: Articles was not found in the DB.
+    post:
+      tags:
+        - Articles
+      description:
+        Create a new article.
+      requestBody:
+        description: Create a new article record.
+        required: true
+        content:
+         application/json:
+          schema:
+            $ref: ./article.json#/definitions/article
+      responses:
+        '200':
+          description: Create a new article record.
+        '404':
+          description: Articles was not found in the DB.
+  /articles/{id}:
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+        description: Numeric id of the article
+    get:
+      tags:
+        - Articles
+      description:
+        Get article by id.
+      responses:
+        '200':
+          description: View of an article record.
+        '404':
+          description: Articles was not found in the DB.
+    put:
+      tags:
+        - Articles
+      description:
+        Update article by id.
+      responses:
+        '200':
+          description: Update designated article successfully.
+        '404':
+          description: Articles was not found in the DB.
+    delete:
+      tags:
+        - Articles
+      description:
+        Delete article by id.
+      responses:
+        '200':
+          description: Delete designated article record.
+        '404':
+          description: Articles was not found in the DB.
+  /users:
+    get:
+      tags:
+        - Users
+      description:
+        Get All user.
+      responses:
+        '200':
+          description: View of all user records.
+        '404':
+          description: User was not found in the DB.
+    post:
+      tags:
+        - Users
+      description:
+        Create a new user.
+      requestBody:
+        description: Create a new user record.
+        required: true
+        content:
+         application/json:
+          schema:
+            $ref: ./user.json#/definitions/user
+      responses:
+        '200':
+          description: Create new user record.
+        '404':
+          description: User was not found in the DB.
+  /users/{id}:
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+        description: Numeric id of the user
+    get:
+      tags:
+        - Users
+      description:
+        Get user by id.
+      responses:
+        '200':
+          description: View of an user record.
+        '404':
+          description: User was not found in the DB.
+    put:
+      tags:
+        - Users
+      description:
+        Update user by id.
+      responses:
+        '200':
+          description: Update designated user successfully.
+        '404':
+          description: User was not found in the DB.
+    delete:
+      tags:
+        - Users
+      description:
+        Delete user by id.
+      responses:
+        '200':
+          description: Delete designated user record.
+        '404':
+          description: User was not found in the DB.

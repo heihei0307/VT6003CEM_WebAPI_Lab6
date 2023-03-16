@@ -61,12 +61,8 @@ const add = async (article) => {
   }
 };
 const update = async (id, article, userId) => {
-  let articlesData = await getById(id);
-  if (articlesData.length) {
-    let articles = articlesData[0];
-    if (articles.authorid != userId) {
-      return { status: 500, err: "You are not articles owner" };
-    }
+  if (!await checkArticlesOwner(id, userId)) {
+    return { status: 500, err: "You are not articles owner" };
   }
   let updateItem = "";
   Object.entries(article).forEach((entry) => {

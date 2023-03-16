@@ -4,6 +4,7 @@ import * as model from "../models/users"
 import * as DTO from '../interface/users'
 
 import { basicAuth } from '../controllers/auth'
+import { validateUser } from '../controllers/validation'
 
 const router = new Router({ prefix: '/api/v1/users' });
 
@@ -83,8 +84,8 @@ const deleteUser = async (ctx: RouterContext, next: any) => {
 
 router.get('/', basicAuth, getAll);
 router.get('/:id([0-9]{1,})', basicAuth, getById);
-router.post('/', basicAuth, bodyParser(), createUser);
-router.put('/:id([0-9]{1,})', basicAuth, bodyParser(), updateUser);
+router.post('/', basicAuth, bodyParser(), validateUser, createUser);
+router.put('/:id([0-9]{1,})', basicAuth, bodyParser(), validateUser, updateUser);
 router.delete('/:id([0-9]{1,})', basicAuth, deleteUser);
 
 export { router }

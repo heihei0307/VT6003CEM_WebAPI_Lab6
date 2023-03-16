@@ -4,6 +4,7 @@ import * as model from "../models/articles"
 import * as DTO from '../interface/articles'
 
 import { basicAuth } from '../controllers/auth'
+import { validateArticle } from '../controllers/validation'
 
 // interface iArticles {
 //   id: number
@@ -141,8 +142,8 @@ const deleteArticle = async (ctx: RouterContext, next: any) => {
 
 router.get('/', getAll);
 router.get('/:id([0-9]{1,})', getById);
-router.post('/', basicAuth, bodyParser(), createArticle);
-router.put('/:id([0-9]{1,})', basicAuth, bodyParser(), updateArticle);
+router.post('/', basicAuth, bodyParser(), validateArticle, createArticle);
+router.put('/:id([0-9]{1,})', basicAuth, bodyParser(), validateArticle, updateArticle);
 router.delete('/:id([0-9]{1,})', basicAuth, deleteArticle);
 
 export { router }
